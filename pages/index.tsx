@@ -1,6 +1,7 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
+import { useState } from "react";
 
 import questions from "../data/questions";
 
@@ -8,11 +9,15 @@ const columnsClasses: string = "grid-cols-5";
 const rowsClasses: string = "grid-rows-4";
 
 const blockClasses: string =
-  "bg-gray-100 bg-opacity-20 flex justify-center items-center rounded-sm";
+  "bg-gray-100 flex justify-center items-center rounded-sm";
 
 const Home: NextPage = () => {
+  const [currentCat, setCurrCat] = useState<null | keyof typeof questions>(
+    null
+  );
+
   return (
-    <div className="p-2">
+    <div className="p-2 h-screen w-screen flex justify-center items-center">
       <Head>
         <title>The Interview Game Show</title>
         <meta name="description" content="The Interview Game Show" />
@@ -24,7 +29,9 @@ const Home: NextPage = () => {
           {Object.keys(questions).map((c) => (
             <h2
               key={c}
-              className={`${blockClasses} min-h-[60px] font-medium text-xl`}
+              className={`${blockClasses} ${
+                currentCat === c ? "bg-opacity-10" : "bg-opacity-5"
+              } min-h-[90px] font-medium text-xl`}
             >
               {c}
             </h2>
@@ -41,7 +48,9 @@ const Home: NextPage = () => {
               .map((points) => (
                 <Link key={`${c}-${points}`} href={`/${c}/${points}`}>
                   <div
-                    className={`${blockClasses} min-h-[40px] grid-cols-1 hover:bg-opacity-40 hover:cursor-pointer`}
+                    onMouseEnter={() => setCurrCat(c)}
+                    onMouseLeave={() => setCurrCat(null)}
+                    className={`${blockClasses} bg-opacity-20 min-h-[60px] grid-cols-1 hover:bg-opacity-40 hover:cursor-pointer`}
                   >
                     {points}
                   </div>

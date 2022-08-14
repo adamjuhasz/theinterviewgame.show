@@ -50,9 +50,9 @@ export const getStaticProps: GetStaticProps<Props, Params> = async (
 
 const Question: NextPage<Props> = (props) => {
   return (
-    <>
+    <div className="p-2 h-screen w-screen flex justify-center items-center">
       {props.category} - {props.points}
-    </>
+    </div>
   );
 };
 
