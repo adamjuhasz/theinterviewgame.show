@@ -39,12 +39,13 @@ const Home: NextPage = () => {
               .map((x) => parseInt(x, 10))
               .sort()
               .map((points) => (
-                <div
-                  key={`${c}-${points}`}
-                  className={`${blockClasses} min-h-[40px] grid-cols-1 hover:bg-opacity-40 hover:cursor-pointer`}
-                >
-                  <Link href={`/${c}/${points}`}>{points}</Link>
-                </div>
+                <Link key={`${c}-${points}`} href={`/${c}/${points}`}>
+                  <div
+                    className={`${blockClasses} min-h-[40px] grid-cols-1 hover:bg-opacity-40 hover:cursor-pointer`}
+                  >
+                    {points}
+                  </div>
+                </Link>
               ))
           )}
         </section>
