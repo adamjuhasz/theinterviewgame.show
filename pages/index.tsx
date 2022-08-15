@@ -1,9 +1,10 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import questions from "../data/questions";
+import buttonClasses from "../classes/button";
 
 const columnsClasses: string = "grid-cols-5";
 const rowsClasses: string = "grid-rows-4";
@@ -15,6 +16,42 @@ const Home: NextPage = () => {
   const [currentCat, setCurrCat] = useState<null | keyof typeof questions>(
     null
   );
+
+  const [visited, setVisited] = useState<
+    Record<string, string | undefined | null>
+  >({});
+
+  const [scores, setScores] = useState<Record<string, number>>({});
+
+  useEffect(() => {
+    const numberOfKeys = localStorage.length;
+    let beenVisited = {} as typeof visited;
+    let currentScores = {} as typeof scores;
+
+    for (let i = 0; i < numberOfKeys; i++) {
+      const key = localStorage.key(i);
+
+      if (key !== null && key.includes("visited:")) {
+        beenVisited = {
+          ...beenVisited,
+          [key.replace("visited:", "")]: localStorage.getItem(key),
+        };
+      }
+
+      if (key !== null && key.includes("score:")) {
+        currentScores = {
+          ...currentScores,
+          [key.replace("score:", "")]: parseInt(
+            localStorage.getItem(key) || "0",
+            10
+          ),
+        };
+      }
+    }
+
+    setVisited(beenVisited);
+    setScores(currentScores);
+  }, [setVisited]);
 
   return (
     <div className="p-2 h-screen w-screen flex justify-center items-center">
@@ -30,10 +67,12 @@ const Home: NextPage = () => {
             <h2
               key={c}
               className={`${blockClasses} ${
-                currentCat === c ? "bg-opacity-10" : "bg-opacity-5"
+                currentCat === c ? "bg-opacity-[15%]" : "bg-opacity-5"
               } min-h-[90px] font-medium text-xl`}
             >
-              {c}
+              <p className="text-center overflow-hidden text-ellipsis w-full">
+                {c}
+              </p>
             </h2>
           ))}
         </header>
@@ -50,7 +89,11 @@ const Home: NextPage = () => {
                   <div
                     onMouseEnter={() => setCurrCat(c)}
                     onMouseLeave={() => setCurrCat(null)}
-                    className={`${blockClasses} bg-opacity-20 min-h-[60px] grid-cols-1 hover:bg-opacity-40 hover:cursor-pointer`}
+                    className={`${blockClasses} ${
+                      visited[`/${c}/${points}`] === "true"
+                        ? "text-gray-500 font-light"
+                        : "text-gray-100 font-semibold hover:bg-opacity-40"
+                    } bg-opacity-20 min-h-[60px] grid-cols-1  hover:cursor-pointer`}
                   >
                     {points}
                   </div>
@@ -58,6 +101,37 @@ const Home: NextPage = () => {
               ))
           )}
         </section>
+
+        <section className="mt-4">
+          {Object.keys(scores)
+            .sort((a, b) => {
+              if (scores[a] < scores[b]) {
+                return 1;
+              }
+
+              if (scores[a] > scores[b]) {
+                return -1;
+              }
+
+              return 0;
+            })
+            .map((name, index) => (
+              <div key={name} className={`${index % 2 ? "bg-gray-700" : ""}`}>
+                {name} - {scores[name]}
+              </div>
+            ))}
+        </section>
+
+        <button
+          className={`absolute bottom-2 right-2 ${buttonClasses}`}
+          onClick={() => {
+            localStorage.clear();
+            setVisited({});
+            setScores({});
+          }}
+        >
+          Reset game
+        </button>
       </main>
     </div>
   );
