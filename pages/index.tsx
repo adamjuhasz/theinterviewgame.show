@@ -61,48 +61,52 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className="mx-auto w-full md:max-w-3xl">
-        <header className={`grid ${columnsClasses} gap-4 grid-rows-1`}>
-          {Object.keys(questions).map((c) => (
-            <h2
-              key={c}
-              className={`${blockClasses} ${
-                currentCat === c ? "bg-opacity-[15%]" : "bg-opacity-5"
-              } min-h-[90px] font-medium text-xl`}
-            >
-              <p className="text-center overflow-hidden text-ellipsis w-full">
-                {c}
-              </p>
-            </h2>
-          ))}
-        </header>
+      <main className="mx-auto w-full lg:max-w-3xl flex flex-row lg:block ">
+        <div className="flex-grow">
+          <header
+            className={`grid ${columnsClasses} gap-1 lg:gap-2 grid-rows-1`}
+          >
+            {Object.keys(questions).map((c) => (
+              <h2
+                key={c}
+                className={`${blockClasses} ${
+                  currentCat === c ? "bg-opacity-[15%]" : "bg-opacity-5"
+                } min-h-[90px]`}
+              >
+                <p className="text-center overflow-hidden text-ellipsis w-full font-medium text-sm md:text-base lg:text-xl">
+                  {c}
+                </p>
+              </h2>
+            ))}
+          </header>
 
-        <section
-          className={`grid ${columnsClasses} ${rowsClasses} gap-4 mt-4 grid-flow-col`}
-        >
-          {Object.keys(questions).map((c) =>
-            Object.keys(questions[c])
-              .map((x) => parseInt(x, 10))
-              .sort()
-              .map((points) => (
-                <Link key={`${c}-${points}`} href={`/${c}/${points}`}>
-                  <div
-                    onMouseEnter={() => setCurrCat(c)}
-                    onMouseLeave={() => setCurrCat(null)}
-                    className={`${blockClasses} ${
-                      visited[`/${c}/${points}`] === "true"
-                        ? "text-gray-500 font-light"
-                        : "text-gray-100 font-semibold hover:bg-opacity-40"
-                    } bg-opacity-20 min-h-[60px] grid-cols-1  hover:cursor-pointer`}
-                  >
-                    {points}
-                  </div>
-                </Link>
-              ))
-          )}
-        </section>
+          <section
+            className={`grid ${columnsClasses} ${rowsClasses} gap-1 lg:gap-2 mt-1 lg:mt-2 grid-flow-col`}
+          >
+            {Object.keys(questions).map((c) =>
+              Object.keys(questions[c])
+                .map((x) => parseInt(x, 10))
+                .sort()
+                .map((points) => (
+                  <Link key={`${c}-${points}`} href={`/${c}/${points}`}>
+                    <div
+                      onMouseEnter={() => setCurrCat(c)}
+                      onMouseLeave={() => setCurrCat(null)}
+                      className={`${blockClasses} ${
+                        visited[`/${c}/${points}`] === "true"
+                          ? "text-gray-500 font-light"
+                          : "text-gray-100 font-semibold hover:bg-opacity-40"
+                      } bg-opacity-20 min-h-[60px] grid-cols-1 hover:cursor-pointer`}
+                    >
+                      {points}
+                    </div>
+                  </Link>
+                ))
+            )}
+          </section>
+        </div>
 
-        <section className="mt-4">
+        <section className="lg:mt-4 border-gray-100 border-2 rounded-lg overflow-hidden w-1/4 ml-2 lg:ml-0 lg:w-auto h-auto">
           {Object.keys(scores)
             .sort((a, b) => {
               if (scores[a] < scores[b]) {
@@ -116,7 +120,12 @@ const Home: NextPage = () => {
               return 0;
             })
             .map((name, index) => (
-              <div key={name} className={`${index % 2 ? "bg-gray-700" : ""}`}>
+              <div
+                key={name}
+                className={`${
+                  index % 2 ? "bg-gray-700" : "bg-gray-800"
+                } px-2 py-1`}
+              >
                 {name} - {scores[name]}
               </div>
             ))}

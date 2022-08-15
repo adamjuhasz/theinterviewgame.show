@@ -61,14 +61,14 @@ const Question: NextPage<Props> = (props) => {
 
   return (
     <div className="p-2 h-screen w-screen flex justify-center items-center">
-      <main className="flex flex-col items-center max-w-xl">
-        <h1 className="text-6xl font-semibold px-4 text-center">
+      <main className="flex flex-col items-center w-10/12 lg:max-w-[700px]">
+        <h1 className=" text-3xl lg:text-6xl font-semibold px-4 text-center">
           {props.category}
         </h1>
 
-        <div className="h-[1px] w-full bg-gray-500 my-4" />
+        <div className="h-[1px] w-full bg-gray-500 my-2 lg:my-4" />
 
-        <p className="text-xl text-center px-4">
+        <p className="text-lg lg:text-2xl text-center px-4">
           {questions[props.category][props.points]}
         </p>
 
@@ -78,7 +78,7 @@ const Question: NextPage<Props> = (props) => {
           </Link>
         </div>
 
-        <div className="h-[1px] w-full bg-transparent my-4" />
+        <div className="h-[1px] w-full bg-transparent my-1 lg:my-4" />
 
         <PlayerBox {...props} />
       </main>
@@ -93,14 +93,12 @@ const PlayerBox = (props: Props): JSX.Element => {
     [typeof otherPlayers[number] | null, number]
   >([null, -1]);
 
-  const [rounds] = useState(Math.floor(Math.random() * 30 + 12));
-
   useEffect(() => {
     if (round === -1) {
       return;
     }
 
-    if (round === rounds) {
+    if (round === otherPlayers.length * 2) {
       return;
     }
 
@@ -114,7 +112,7 @@ const PlayerBox = (props: Props): JSX.Element => {
     return () => {
       clearTimeout(timer);
     };
-  }, [round, rounds]);
+  }, [round]);
 
   useEffect(() => {
     const handler = () => {
@@ -143,7 +141,7 @@ const PlayerBox = (props: Props): JSX.Element => {
   }, [props.points, router, selectedPlayer]);
 
   return (
-    <div className="grid grid-cols-3 gap-4 w-full">
+    <div className="grid grid-cols-5 lg:grid-cols-3 gap-1 lg:gap-2 w-full lg:w-3/4">
       {otherPlayers.map((name) => (
         <div
           key={name}
@@ -151,19 +149,21 @@ const PlayerBox = (props: Props): JSX.Element => {
             selectedPlayer === name
               ? "bg-gray-300 text-gray-900 font-semibold"
               : "bg-gray-700 text-gray-100 font-normal"
-          } flex items-center justify-center aspect-[4/2.5] rounded-md`}
+          } flex items-center justify-center aspect-[4/2.5] rounded-md overflow-hidden`}
         >
           {name}
         </div>
       ))}
 
+      <div className="lg:hidden"></div>
+
       <button
         onClick={() => {
           setSelectedPlayer([selectedPlayer, 0]);
         }}
-        className={`bg-gray-700 flex items-center justify-center aspect-[4/2.5] font-semibold text-3xl hover:bg-gray-500 rounded-md`}
+        className={`bg-emerald-900 flex items-center justify-center aspect-[4/2.5] font-semibold decoration-emerald-100 decoration-solid decoration-2 underline-offset-4 hover:bg-emerald-600 rounded-md`}
       >
-        🌪 Spin
+        <span className="hidden lg:inline">🌪&nbsp;</span>Spin
       </button>
     </div>
   );
