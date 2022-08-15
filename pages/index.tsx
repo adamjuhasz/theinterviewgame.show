@@ -132,7 +132,7 @@ const Home: NextPage = () => {
         </section>
 
         <button
-          className={`absolute bottom-2 right-2 ${buttonClasses}`}
+          className={`fixed bottom-2 right-2 ${buttonClasses}`}
           onClick={() => {
             localStorage.clear();
             setVisited({});
