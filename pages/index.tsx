@@ -106,7 +106,11 @@ const Home: NextPage = () => {
           </section>
         </div>
 
-        <section className="lg:mt-4 border-gray-100 border-2 rounded-lg overflow-hidden w-1/4 ml-2 lg:ml-0 lg:w-auto h-auto">
+        <section
+          className={`${
+            Object.keys(scores).length === 0 ? "lg:hidden" : ""
+          } lg:mt-4 border-gray-100 border-2 rounded-lg overflow-hidden w-1/4 ml-2 lg:ml-0 lg:w-auto h-auto`}
+        >
           {Object.keys(scores)
             .sort((a, b) => {
               if (scores[a] < scores[b]) {
