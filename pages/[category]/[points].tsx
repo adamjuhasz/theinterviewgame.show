@@ -86,11 +86,14 @@ const Question: NextPage<Props> = (props) => {
   );
 };
 
+const allPlayers = ["Mary", ...otherPlayers] as const;
+const playersToSample = ["Mary", "Mary", "Mary", ...otherPlayers];
+
 const PlayerBox = (props: Props): JSX.Element => {
   const router = useRouter();
 
   const [[selectedPlayer, round], setSelectedPlayer] = useState<
-    [typeof otherPlayers[number] | null, number]
+    [typeof allPlayers[number] | null, number]
   >([null, -1]);
 
   useEffect(() => {
@@ -98,13 +101,16 @@ const PlayerBox = (props: Props): JSX.Element => {
       return;
     }
 
-    if (round === otherPlayers.length * 2) {
+    if (round === allPlayers.length * 2) {
       return;
     }
 
     const timer = setTimeout(() => {
       setSelectedPlayer([
-        sample(otherPlayers) || otherPlayers[(round + 1) % otherPlayers.length],
+        (sample(playersToSample) ||
+          allPlayers[
+            (round + 1) % allPlayers.length
+          ]) as typeof allPlayers[number],
         round + 1,
       ]);
     }, 100);
@@ -142,7 +148,7 @@ const PlayerBox = (props: Props): JSX.Element => {
 
   return (
     <div className="grid grid-cols-5 lg:grid-cols-3 gap-1 lg:gap-2 w-full lg:w-3/4">
-      {otherPlayers.map((name) => (
+      {allPlayers.map((name) => (
         <div
           key={name}
           className={`${
@@ -155,15 +161,13 @@ const PlayerBox = (props: Props): JSX.Element => {
         </div>
       ))}
 
-      <div className="lg:hidden"></div>
-
       <button
         onClick={() => {
           setSelectedPlayer([selectedPlayer, 0]);
         }}
-        className={`bg-emerald-900 flex items-center justify-center aspect-[4/2.5] font-semibold decoration-emerald-100 decoration-solid decoration-2 underline-offset-4 hover:bg-emerald-600 rounded-md`}
+        className={`bg-emerald-900 col-span-1 lg:col-span-3 flex items-center justify-center aspect-[4/2.5] lg:aspect-auto lg:h-[60px] font-semibold decoration-emerald-100 decoration-solid decoration-2 underline-offset-4 hover:bg-emerald-600 rounded-md`}
       >
-        <span className="hidden lg:inline">🌪&nbsp;</span>Spin
+        <span className="hidden lg:inline ">🌪&nbsp;</span>Spin
       </button>
     </div>
   );
